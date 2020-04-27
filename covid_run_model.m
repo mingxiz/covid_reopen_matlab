@@ -28,5 +28,5 @@ function x = covid_run_model(x0, T_p_start, T_p_length, n_age_strat, n_work_stra
     dim = size(x_crt_policy);
     dim(5) = size(x_crt_nopolicy,5)+size(x_crt_policy,5)-1;
     x = zeros(dim);
-    x(:,:,:,:,1:T_p_start) = x_crt_nopolicy(:,:,:,:,1:T_p_start);
+    x(:,:,:,:,1:T_p_start) = x_crt_nopolicy_p(:,:,:,:,1:T_p_start);
     x(:,:,:,:,T_p_start+1:end) = x_crt_policy;
