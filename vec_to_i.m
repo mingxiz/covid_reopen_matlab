@@ -1,5 +1,11 @@
 function index_i = vec_to_i(vec_i,n_param)
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
+% a util for convenience
 n_work_strat = n_param.n_work_strat;
 n_age_strat = n_param.n_age_strat;
 
