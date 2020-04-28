@@ -1,6 +1,11 @@
 
 function main
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
 n_age_strat = 3; n_work_strat = 3; total_N = 1938000;
 %following distribution same as previous paper, without work strat
 age_dist = [0.24, 0.6, 0.16]; work_dist = [0.45 0.2 1-0.45-0.2];
