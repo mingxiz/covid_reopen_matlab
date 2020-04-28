@@ -1,4 +1,10 @@
 function parm_beta = covid_open_beta(n_age_strat,n_work_strat, v_table_nopolicy, v_table_policy, param_epi)
+
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
     % feed in table with v_table_policy, nopolicy
     %policy e could depedent on age_strat and work_strat, e is of size zeros(n_age_strat,n_work_strat,n_age_strat,n_work_strat)
     id_p = [1, 2];
