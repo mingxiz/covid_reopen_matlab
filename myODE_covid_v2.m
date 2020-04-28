@@ -1,5 +1,11 @@
 function dy = myODE_covid_v2(t, y, n_param, param_epi, parm_beta, parm_policy, x0)
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
+
 % in v2, the model didn't encorporate the change on Nj0 for dieout rate
 
     n_age_strat =  n_param.n_age_strat;
