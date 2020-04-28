@@ -1,5 +1,5 @@
 function parm_beta = covid_open_beta(n_age_strat,n_work_strat, v_table_nopolicy, v_table_policy, param_epi)
-    
+    % feed in table with v_table_policy, nopolicy
     %policy e could depedent on age_strat and work_strat, e is of size zeros(n_age_strat,n_work_strat,n_age_strat,n_work_strat)
     id_p = [1, 2];
     % id_p = 1 no policy, id_p = 2 policy
