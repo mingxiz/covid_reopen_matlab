@@ -1,5 +1,11 @@
 function vec = i_to_vec(i_index,n_age_strat,n_work_strat)
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
+% utils for convenience
     table_index = zeros(n_age_strat,n_work_strat,2,8);
     start = 1;
     table_index_2 = cell(1,n_age_strat*n_work_strat*2*8);
