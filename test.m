@@ -1,6 +1,12 @@
 
 function test
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
+
 % use the same parameter as the orginal code did 
 % one potential problem, their code didn't consider Nj0 as in system of
 % equation but just as parameter that does not change across time
