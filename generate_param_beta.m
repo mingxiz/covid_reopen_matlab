@@ -1,5 +1,10 @@
 function parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi)
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
 %here need table be on same dictionary
     T = readtable('contact_matrix.xlsx','Range','AA1:AI37');
     V_temp = table2array(T);
