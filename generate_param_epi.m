@@ -10,7 +10,7 @@ function param_epi = generate_param_epi(n_age_strat, n_work_strat)
     param_epi.k_det = 0.5;
     %1/delta: Average length of the incubation period
     param_epi.delta = 1/5;
-    % Proportion of cases in age group i that do not go on to experience symptoms
+    % Proportion of cases in age group i that do not go on to experience symptoms assume same across work strat
     param_epi.alpha_i = repmat([0.75, 0.3, 0.3]',1,n_work_strat);
     % Relative detection rate for individuals in age group i 
     param_epi.k_rep_i = ones(n_age_strat,n_work_strat);
