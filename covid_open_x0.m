@@ -1,5 +1,5 @@
 function x0 = covid_open_x0(n_age_strat,n_work_strat, age_dist, work_dist, epi_dist, total_N)
-    
+    % this function is not used in main or test, as we are feeding in the same parameter as the tool
     % at beginiing 0 people under policy
     policy_pct = 0
     x0 = zeros(n_age_strat, n_work_strat, 2, 8);
