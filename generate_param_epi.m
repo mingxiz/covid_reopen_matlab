@@ -1,5 +1,10 @@
 function param_epi = generate_param_epi(n_age_strat, n_work_strat)
 
+%  SEIR Model for COVID-19 reopenning project
+%  Written for MATLAB_R2019b
+%  Copyright (C) 2020
+%     Mingxi Zhu <mingxiz@stanford.edu>
+
     param_epi.kappa = 0.38;
     param_epi.p = 0.05;
     % Relative susceptibility of individuals in age group i
