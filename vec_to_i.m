@@ -5,7 +5,7 @@ function index_i = vec_to_i(vec_i,n_param)
 %  Copyright (C) 2020
 %     Mingxi Zhu <mingxiz@stanford.edu>
 
-% a util for convenience
+%  util for convenience 
 n_work_strat = n_param.n_work_strat;
 n_age_strat = n_param.n_age_strat;
 
