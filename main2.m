@@ -19,7 +19,7 @@ parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi);
 % generate param policy
 param_policy = generate_param_policy;
 % check policy_pct
-param_policy.policy_pct 
+param_policy.policy_pct;
 param_policy.e = 1;
 
 % new cases 20 
@@ -67,7 +67,7 @@ end
 
 
 % following website with time span 1 180, use ode 45 as solver
-t_span_end = 180;
+t_span_end = 800;
 tspan = [1 t_span_end];
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 % v1 is the version that didn't consider death influence on infection
@@ -209,7 +209,7 @@ end
 
 % change to culmulative
 mean_hospital = 5;
-mean_ICU = 10;
+mean_ICU = 15;
 plot_DI_hosp = zeros(n_age_strat,t_span_end);
 plot_DI_resp = ones(n_age_strat,t_span_end);
 
@@ -265,7 +265,7 @@ set(plot1(4),'DisplayName','Ventilator Capacity','LineStyle','--',...
 % Create xlabel
 xlabel({'Time (days)'});
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 box(axes1,'on');
 % Set the remaining axes properties
 set(axes1,'FontSize',14,'XGrid','on','XTick',[0 50 100 150 200],'YGrid',...
@@ -290,7 +290,7 @@ set(plot1(4),'DisplayName','Bed Capacity','LineWidth',2,'LineStyle','--',...
 xlabel({'Time (days)'});
 % Create title
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
 set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
@@ -311,15 +311,9 @@ set(plot1(4),'DisplayName','Ventilator Capacity','LineWidth',2,'LineStyle','--',
 % Create xlabel
 xlabel({'Time (days)'});
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
 set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
 legend(axes1,'show');
-
-
-
-
-
-
 
