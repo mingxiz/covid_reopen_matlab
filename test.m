@@ -1,12 +1,6 @@
 
 function test
 
-%  SEIR Model for COVID-19 reopenning project
-%  Written for MATLAB_R2019b
-%  Copyright (C) 2020
-%     Mingxi Zhu <mingxiz@stanford.edu>
-
-
 % use the same parameter as the orginal code did 
 % one potential problem, their code didn't consider Nj0 as in system of
 % equation but just as parameter that does not change across time
@@ -73,7 +67,8 @@ end
 
 
 % following website with time span 1 180, use ode 45 as solver
-tspan = [1 180];
+t_span_end = 180;
+tspan = [1 t_span_end];
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 % v1 is the version that didn't consider death influence on infection
 sol = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta, param_policy, x0_p), tspan, y0);
@@ -185,3 +180,139 @@ set(subplot3,'FontSize',12,'XTick',[0 50 100 150 200]);
 legend3 = legend(subplot3,'show');
 set(legend3,'FontSize',12);
 
+
+
+% creat hospitalization
+% plot DI as website
+
+capacity_bed = (1034+1222)*ones(1,size(x,5));
+capacity_ven = 722*ones(1,size(x,5));
+
+% create hospitalization by age
+% plot DI as website
+hospitalization_rate = [0.00 0.1124 0.2885];
+respirator_rate = [0.00 0.0304 0.0673];
+plot_DI_hosp_rates = zeros(n_age_strat,size(x,5));
+plot_DI_resp_rates = zeros(n_age_strat,size(x,5));
+for i = 1:n_age_strat
+    for t = 1: size(x,5)
+        plot_DI_hosp_rates(i, t) = hospitalization_rate(1, i)*sum(x(i,:,:,4,t),'all');
+        plot_DI_resp_rates(i, t) = respirator_rate(1, i)*sum(x(i,:,:,4,t),'all');
+    end
+end
+plot_DI_hosp_rates_interp = zeros(n_age_strat,t_span_end);
+plot_DI_resp_rates_interp = zeros(n_age_strat,t_span_end);
+for i = 1:n_age_strat
+    plot_DI_hosp_rates_interp(i,:) = interp1(sol.x,plot_DI_hosp_rates(i,:),[1:1:t_span_end]);
+    plot_DI_resp_rates_interp(i,:) = interp1(sol.x,plot_DI_resp_rates(i,:),[1:1:t_span_end]);
+end
+
+% change to culmulative
+mean_hospital = 5;
+mean_ICU = 10;
+plot_DI_hosp = zeros(n_age_strat,t_span_end);
+plot_DI_resp = ones(n_age_strat,t_span_end);
+
+plot_DI_hosp(:,1)=plot_DI_hosp_rates_interp(:,1);
+plot_DI_resp(:,1)=plot_DI_resp_rates_interp(:,1);
+for t = 2:mean_hospital
+    for i = 1:n_age_strat
+    plot_DI_hosp(i,t)=plot_DI_hosp_rates_interp(i,t)+plot_DI_hosp(i,t-1);
+    end
+end
+for t = 2:mean_ICU
+     for i = 1:n_age_strat
+     plot_DI_resp(i,t)=plot_DI_resp_rates_interp(i,t)+plot_DI_resp(i,t-1);
+     end
+end
+for t = mean_hospital+1:t_span_end
+     for i = 1:n_age_strat
+     plot_DI_hosp(i,t)=plot_DI_hosp_rates_interp(i,t)+plot_DI_hosp(i,t-1)-plot_DI_hosp_rates_interp(i,t-mean_hospital);
+     end
+end
+for t = mean_ICU+1:t_span_end
+     for i = 1:n_age_strat
+     plot_DI_resp(i,t)=plot_DI_resp_rates_interp(i,t)+plot_DI_resp(i,t-1)-plot_DI_resp_rates_interp(i,t-mean_ICU);
+     end
+end
+plot_DI_hosp_total = sum(plot_DI_hosp,1);
+plot_DI_resp_total = sum(plot_DI_resp,1);
+
+capacity_bed = (1034+1222)*ones(1,t_span_end);
+capacity_ven = 722*ones(1,t_span_end);
+X2 = [1:t_span_end];
+
+YMatrix4 = [plot_DI_hosp_total;plot_DI_resp_total;capacity_bed;capacity_ven];
+YMatrix5 = [plot_DI_hosp;capacity_bed];
+YMatrix6 = [plot_DI_resp;capacity_ven];
+
+
+
+% Create figure
+figure2 = figure;
+% Create axes
+axes1 = axes('Parent',figure2);
+hold(axes1,'on');
+% Create multiple lines using matrix input to plot
+plot1 = plot(X2,YMatrix4,'LineWidth',3,'Parent',axes1);
+set(plot1(1),'DisplayName','Hospital',...
+    'Color',[0.850980392156863 0.325490196078431 0.0980392156862745]);
+set(plot1(2),'DisplayName','Ventilator',...
+    'Color',[0 0.447058823529412 0.741176470588235]);
+set(plot1(3),'DisplayName','Bed Capacity','LineStyle',':','Color',[0 0 0]);
+set(plot1(4),'DisplayName','Ventilator Capacity','LineStyle','--',...
+    'Color',[0 0 0]);
+% Create xlabel
+xlabel({'Time (days)'});
+% Create title
+title({'Daily cases needing advanced care'});
+box(axes1,'on');
+% Set the remaining axes properties
+set(axes1,'FontSize',14,'XGrid','on','XTick',[0 50 100 150 200],'YGrid',...
+    'on','YTick',[0 2500 5000 7500 10000 12500]);
+% Create legend
+legend(axes1,'show');
+
+% plot
+% Create figure
+figure3 = figure;
+% Create axes
+axes1 = axes('Parent',figure3);
+hold(axes1,'on');
+% Create multiple lines using matrix input to plot
+plot1 = plot(X2,YMatrix5,'LineWidth',3,'Parent',axes1);
+set(plot1(1),'DisplayName','Y');
+set(plot1(2),'DisplayName','M');
+set(plot1(3),'DisplayName','O');
+set(plot1(4),'DisplayName','Bed Capacity','LineWidth',2,'LineStyle','--',...
+    'Color',[0.149019607843137 0.149019607843137 0.149019607843137]);
+% Create xlabel
+xlabel({'Time (days)'});
+% Create title
+% Create title
+title({'Daily cases needing advanced care'});
+% Set the remaining axes properties
+set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
+% Create legend
+legend(axes1,'show');
+
+% Create figure
+figure4 = figure;
+% Create axes
+axes1 = axes('Parent',figure4);
+hold(axes1,'on');
+% Create multiple lines using matrix input to plot
+plot1 = plot(X2,YMatrix6,'LineWidth',3,'Parent',axes1);
+set(plot1(1),'DisplayName','Y');
+set(plot1(2),'DisplayName','M');
+set(plot1(3),'DisplayName','O');
+set(plot1(4),'DisplayName','Ventilator Capacity','LineWidth',2,'LineStyle','--',...
+    'Color',[0.149019607843137 0.149019607843137 0.149019607843137]);
+% Create xlabel
+xlabel({'Time (days)'});
+% Create title
+title({'Daily cases needing advanced care'});
+% Set the remaining axes properties
+set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
+% Create legend
+legend(axes1,'show');
