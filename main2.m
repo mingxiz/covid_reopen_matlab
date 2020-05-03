@@ -1,5 +1,6 @@
+table_name = 'contact_matrix.xlsx'
 
-function main2
+function main2(table_name)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
@@ -15,7 +16,7 @@ age_work_dist = [0.24*[0.554 0.374 0.072]; 0.6*[0.56 0.373 0.067];0.16*[ 0.508 0
 % generate epi parameters besides beta
 param_epi = generate_param_epi(n_age_strat, n_work_strat);
 % generate beta
-parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi);
+parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi, table_name);
 % generate param policy
 param_policy = generate_param_policy;
 % check policy_pct
