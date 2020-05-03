@@ -1,4 +1,4 @@
-function parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi)
+function parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi, table_name)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
