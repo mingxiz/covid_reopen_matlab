@@ -1,3 +1,4 @@
+table_name = 'contact_matrix.xlsx'
 
 function main2_2016(table_name)
 
