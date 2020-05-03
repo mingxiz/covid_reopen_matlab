@@ -6,7 +6,7 @@ function parm_beta = generate_param_beta(n_age_strat, n_work_strat, param_epi, t
 %     Mingxi Zhu <mingxiz@stanford.edu>
 
 %here need table be on same dictionary
-    T = readtable('contact_matrix.xlsx','Range','AA1:AI37');
+    T = readtable(table_name,'Range','AA1:AI37');
     V_temp = table2array(T);
     V = zeros(size(V_temp, 2),size(V_temp,2), 4);
     for i = 1: 4
