@@ -1,11 +1,12 @@
-table_name = 'contact_matrix.xlsx'
-
 function main2_2016(table_name)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2016b
 %  Copyright (C) 2020
 %     Mingxi Zhu <mingxiz@stanford.edu>
+
+% time on simulation
+t_span_end = 800;
 
 n_age_strat = 3; n_work_strat = 3; total_N = 1938000;
 %following distribution same as previous paper, without work strat
@@ -68,7 +69,6 @@ end
 
 
 % following website with time span 1 180, use ode 45 as solver
-t_span_end = 800;
 tspan = [1 t_span_end];
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 % v1 is the version that didn't consider death influence on infection
@@ -132,7 +132,7 @@ title({'< 20'});
 box(subplot1,'on');
 grid(subplot1,'on');
 % Set the remaining axes properties
-set(subplot1,'FontSize',12,'XTick',[0 50 100 150 200]);
+set(subplot1,'FontSize',12,'XTick',[0:50:t_span_end]);
 % Create legend
 legend1 = legend(subplot1,'show');
 set(legend1,'FontSize',12);
@@ -154,7 +154,7 @@ title({'21 - 65'});
 box(subplot2,'on');
 grid(subplot2,'on');
 % Set the remaining axes properties
-set(subplot2,'FontSize',12,'XTick',[0 50 100 150 200]);
+set(subplot2,'FontSize',12,'XTick',[0:50:t_span_end]);
 % Create legend
 legend2 = legend(subplot2,'show');
 set(legend2,'FontSize',12);
@@ -179,7 +179,7 @@ title({'> 65'});
 box(subplot3,'on');
 grid(subplot3,'on');
 % Set the remaining axes properties
-set(subplot3,'FontSize',12,'XTick',[0 50 100 150 200]);
+set(subplot3,'FontSize',12,'XTick',[0:50:t_span_end]);
 % Create legend
 legend3 = legend(subplot3,'show');
 set(legend3,'FontSize',12);
@@ -273,8 +273,7 @@ xlabel({'Time (days)'});
 title({'Dyanmics of cases needing advanced care'});
 box(axes1,'on');
 % Set the remaining axes properties
-set(axes1,'FontSize',14,'XGrid','on','XTick',[0 50 100 150 200],'YGrid',...
-    'on','YTick',[0 2500 5000 7500 10000 12500]);
+set(axes1,'FontSize',14,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
 % Create legend
 legend(axes1,'show');
 
@@ -297,7 +296,7 @@ xlabel({'Time (days)'});
 % Create title
 title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
-set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
+set(axes1,'FontSize',16,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
 % Create legend
 legend(axes1,'show');
 
@@ -318,7 +317,7 @@ xlabel({'Time (days)'});
 % Create title
 title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
-set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
+set(axes1,'FontSize',16,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
 % Create legend
 legend(axes1,'show');
 
