@@ -5,6 +5,8 @@ function output = main2_phases(table_name_1, table_name_2, table_name_3, t_span_
 %  Copyright (C) 2020
 %     Mingxi Zhu <mingxiz@stanford.edu>
 
+% phases transition
+
 n_age_strat = 3; n_work_strat = 3; total_N = 1938000;
 %following distribution same as previous paper, without work strat
 age_dist = [0.24, 0.6, 0.16]; work_dist = [0.554 0.374 0.072; 0.56 0.373 0.067; 0.508 0.418 0.074];
