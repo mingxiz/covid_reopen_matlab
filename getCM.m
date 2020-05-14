@@ -1,12 +1,15 @@
 
 function finalCM = getCM(W_multiplier, O_multiplier, S_multiplier, H_multipler, phaseIndicator)
 
+% Written by Zhengli Wang%
+
 %{
 W_multiplier = 1;
 O_multiplier = 1;
 S_multiplier = 1;
 H_multipler = 0.3;
 %}
+
 
 % pre-epidemic benchmark hrs
 pre_epi_bchmrkTWTOTSTH = [1.22
