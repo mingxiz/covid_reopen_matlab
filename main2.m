@@ -5,7 +5,6 @@ function main2(table_name)
 %  Copyright (C) 2020
 %     Mingxi Zhu <mingxiz@stanford.edu>
 
-% param for time 
 t_span_end = 800;
 
 n_age_strat = 3; n_work_strat = 3; total_N = 1938000;
@@ -72,7 +71,7 @@ end
 tspan = [1 t_span_end];
 opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
 % v1 is the version that didn't consider death influence on infection
-sol = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta, param_policy, x0_p), tspan, y0);
+sol = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta, param_policy, x0_p), tspan, y0, opts);
 
 % construct matrix from vector
 x = zeros(n_age_strat,n_work_strat,2,8,size(sol.x,2));
@@ -129,7 +128,7 @@ title({'< 20'});
 box(subplot1,'on');
 grid(subplot1,'on');
 % Set the remaining axes properties
-set(subplot1,'FontSize',12,'XTick',[0:50:t_span_end]);
+set(subplot1,'FontSize',12,'XTick',[0 50 100 150 200]);
 % Create legend
 legend1 = legend(subplot1,'show');
 set(legend1,'FontSize',12);
@@ -151,7 +150,7 @@ title({'21 - 65'});
 box(subplot2,'on');
 grid(subplot2,'on');
 % Set the remaining axes properties
-set(subplot2,'FontSize',12,'XTick',[0:50:t_span_end]);
+set(subplot2,'FontSize',12,'XTick',[0 50 100 150 200]);
 % Create legend
 legend2 = legend(subplot2,'show');
 set(legend2,'FontSize',12);
@@ -176,7 +175,7 @@ title({'> 65'});
 box(subplot3,'on');
 grid(subplot3,'on');
 % Set the remaining axes properties
-set(subplot3,'FontSize',12,'XTick',[0:50:t_span_end]);
+set(subplot3,'FontSize',12,'XTick',[0 50 100 150 200]);
 % Create legend
 legend3 = legend(subplot3,'show');
 set(legend3,'FontSize',12);
@@ -185,9 +184,6 @@ set(legend3,'FontSize',12);
 
 % creat hospitalization
 % plot DI as website
-
-capacity_bed = (1034+1222)*ones(1,size(x,5));
-capacity_ven = 722*ones(1,size(x,5));
 
 % create hospitalization by age
 % plot DI as website
@@ -242,7 +238,6 @@ plot_DI_resp_total = sum(plot_DI_resp,1);
 capacity_bed = (1034+1222)*ones(1,t_span_end);
 capacity_ven = 722*ones(1,t_span_end);
 X2 = [1:t_span_end];
-
 YMatrix4 = [plot_DI_hosp_total;plot_DI_resp_total;capacity_bed;capacity_ven];
 YMatrix5 = [plot_DI_hosp;capacity_bed];
 YMatrix6 = [plot_DI_resp;capacity_ven];
@@ -269,7 +264,8 @@ xlabel({'Time (days)'});
 title({'Dyanmics of cases needing advanced care'});
 box(axes1,'on');
 % Set the remaining axes properties
-set(axes1,'FontSize',14,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
+set(axes1,'FontSize',14,'XGrid','on','XTick',[0 50 100 150 200],'YGrid',...
+    'on','YTick',[0 2500 5000 7500 10000 12500]);
 % Create legend
 legend(axes1,'show');
 
@@ -292,7 +288,7 @@ xlabel({'Time (days)'});
 % Create title
 title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
-set(axes1,'FontSize',16,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
+set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
 legend(axes1,'show');
 
@@ -313,7 +309,7 @@ xlabel({'Time (days)'});
 % Create title
 title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
-set(axes1,'FontSize',16,'XGrid','on','XTick',[0:50:t_span_end],'YGrid','on');
+set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
 legend(axes1,'show');
 

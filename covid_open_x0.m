@@ -1,11 +1,5 @@
 function x0 = covid_open_x0(n_age_strat,n_work_strat, age_dist, work_dist, epi_dist, total_N)
-
-%  SEIR Model for COVID-19 reopenning project
-%  Written for MATLAB_R2019b
-%  Copyright (C) 2020
-%     Mingxi Zhu <mingxiz@stanford.edu>
-
-    % this function is not used in main or test, as we are feeding in the same parameter as the tool
+    
     % at beginiing 0 people under policy
     policy_pct = 0
     x0 = zeros(n_age_strat, n_work_strat, 2, 8);

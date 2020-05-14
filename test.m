@@ -265,7 +265,7 @@ set(plot1(4),'DisplayName','Ventilator Capacity','LineStyle','--',...
 % Create xlabel
 xlabel({'Time (days)'});
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 box(axes1,'on');
 % Set the remaining axes properties
 set(axes1,'FontSize',14,'XGrid','on','XTick',[0 50 100 150 200],'YGrid',...
@@ -290,7 +290,7 @@ set(plot1(4),'DisplayName','Bed Capacity','LineWidth',2,'LineStyle','--',...
 xlabel({'Time (days)'});
 % Create title
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
 set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
@@ -311,8 +311,16 @@ set(plot1(4),'DisplayName','Ventilator Capacity','LineWidth',2,'LineStyle','--',
 % Create xlabel
 xlabel({'Time (days)'});
 % Create title
-title({'Daily cases needing advanced care'});
+title({'Dyanmics of cases needing advanced care'});
 % Set the remaining axes properties
 set(axes1,'FontSize',16,'XGrid','on','YGrid','on');
 % Create legend
 legend(axes1,'show');
+
+
+
+
+
+
+
+

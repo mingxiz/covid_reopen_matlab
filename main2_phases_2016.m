@@ -1,4 +1,4 @@
-function output = main2_phases_2016(table_name_1, table_name_2, table_name_3, t_span_1, t_span_2, t_span_3, N_zero_patient)
+function output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multipler, t_SIP, t_reopen, t_end, N_zero_patient, options_figure)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
@@ -15,7 +15,7 @@ age_work_dist = [0.24*[0.554 0.374 0.072]; 0.6*[0.56 0.373 0.067];0.16*[ 0.508 0
 param_epi = generate_param_epi(n_age_strat, n_work_strat);
 % generate param policy
 param_policy.e = 1;
-% percentage of people under policy control (could be work X age specific)
+% percentage of peop/Users/mingxi/Desktop/COVID_code/main2_phases.mle under policy control (could be work X age specific)
 % each entry is in (0, 1)
 param_policy.policy_pct = 0.01*ones(3,3);
 
@@ -64,11 +64,15 @@ end
 
 
 % following website with time span 1 180, use ode 45 as solver
-tspan1 = [1 t_span_1];
+tspan1 = [1 t_SIP];
+W_multiplier_1 = 1;
+O_multiplier_1 = 1;
+S_multiplier_1 = 1;
+H_multipler_1 = 1;
+phaseIndicator = 1;
+parm_beta_1 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier_1, O_multiplier_1, S_multiplier_1, H_multipler_1, phaseIndicator);
 
-parm_beta_1 = generate_param_beta(n_age_strat, n_work_strat, param_epi, table_name_1);
-
-opts = odeset('RelTol',1e-10,'AbsTol',1e-10);
+opts = odeset('RelTol',1e-4,'AbsTol',1e-4);
 % v1 is the version that didn't consider death influence on infection
 sol1 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_1, param_policy, x0_p), tspan1, y0, opts);
 
@@ -95,9 +99,9 @@ y0_1p = yt1(:,size(sol1.x,2));
 
 
 % following website with time span 1 180, use ode 45 as solver
-tspan2 =[t_span_1+1, t_span_2];
-
-parm_beta_2 = generate_param_beta(n_age_strat, n_work_strat, param_epi, table_name_2);
+tspan2 =[t_SIP+1, t_reopen];
+phaseIndicator = 2;
+parm_beta_2 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multipler, phaseIndicator);
 
 % v1 is the version that didn't consider death influence on infection
 sol2 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_2, param_policy, x0_1p), tspan2, y0_1p, opts);
@@ -125,9 +129,14 @@ y0_2p = yt2(:,size(sol2.x,2));
 
 
 % following website with time span 1 180, use ode 45 as solver
-tspan3 =[t_span_2+1, t_span_3];
+tspan3 =[t_reopen+1, t_end];
+phaseIndicator = 2;
+W_multiplier = 1;
+O_multiplier = 1;
+S_multiplier = 0.5;
+H_multipler = 0.5;
+parm_beta_3 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multipler, phaseIndicator);
 
-parm_beta_3 = generate_param_beta(n_age_strat, n_work_strat, param_epi, table_name_3);
 
 % v1 is the version that didn't consider death influence on infection
 sol3 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_3, param_policy, x0_2p), tspan3, y0_2p, opts);
@@ -166,21 +175,21 @@ for i = 1:n_age_strat
         plot_DI_death_rates_1(i, t)= sum(crt_sum_2(:));
     end
 end
-plot_DI_hosp_rates_interp_1 = zeros(n_age_strat,t_span_1);
-plot_DI_resp_rates_interp_1 = zeros(n_age_strat,t_span_1);
-plot_DI_death_rates_interp_1 = zeros(n_age_strat,t_span_1);
+plot_DI_hosp_rates_interp_1 = zeros(n_age_strat,t_SIP);
+plot_DI_resp_rates_interp_1 = zeros(n_age_strat,t_SIP);
+plot_DI_death_rates_interp_1 = zeros(n_age_strat,t_SIP);
 
 for i = 1:n_age_strat
-    plot_DI_hosp_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_hosp_rates_1(i,:),[1:1:t_span_1]);
-    plot_DI_resp_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_resp_rates_1(i,:),[1:1:t_span_1]);
-    plot_DI_death_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_death_rates_1(i,:),[1:1:t_span_1]);
+    plot_DI_hosp_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_hosp_rates_1(i,:),[1:1:t_SIP]);
+    plot_DI_resp_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_resp_rates_1(i,:),[1:1:t_SIP]);
+    plot_DI_death_rates_interp_1(i,:) = interp1(sol1.x,plot_DI_death_rates_1(i,:),[1:1:t_SIP]);
 end
 
 % change to culmulative
 mean_hospital = 5;
 mean_ICU = 15;
-plot_DI_hosp_1 = zeros(n_age_strat,t_span_1);
-plot_DI_resp_1 = zeros(n_age_strat,t_span_1);
+plot_DI_hosp_1 = zeros(n_age_strat,t_SIP);
+plot_DI_resp_1 = zeros(n_age_strat,t_SIP);
 
 plot_DI_hosp_1(:,1)=plot_DI_hosp_rates_interp_1(:,1);
 plot_DI_resp_1(:,1)=plot_DI_resp_rates_interp_1(:,1);
@@ -198,13 +207,13 @@ for t = 2:mean_ICU
      end
 end
 
-for t = mean_hospital+1:t_span_1
+for t = mean_hospital+1:t_SIP
      for i = 1:n_age_strat
      plot_DI_hosp_1(i,t)=plot_DI_hosp_rates_interp_1(i,t)+plot_DI_hosp_1(i,t-1)-plot_DI_hosp_rates_interp_1(i,t-mean_hospital);
      end
 end
 
-for t = mean_ICU+1:t_span_1
+for t = mean_ICU+1:t_SIP
      for i = 1:n_age_strat
      plot_DI_resp_1(i,t)=plot_DI_resp_rates_interp_1(i,t)+plot_DI_resp_1(i,t-1)-plot_DI_resp_rates_interp_1(i,t-mean_ICU);
      end
@@ -246,44 +255,44 @@ for i = 1:n_age_strat
     end
 end
 
-plot_DI_hosp_rates_interp_2 = zeros(n_age_strat,length([t_span_1+1:1:t_span_2]));
-plot_DI_resp_rates_interp_2 = zeros(n_age_strat,length([t_span_1+1:1:t_span_2]));
-plot_DI_death_rates_interp_2 = zeros(n_age_strat,length([t_span_1+1:1:t_span_2]));
+plot_DI_hosp_rates_interp_2 = zeros(n_age_strat,length([t_SIP+1:1:t_reopen]));
+plot_DI_resp_rates_interp_2 = zeros(n_age_strat,length([t_SIP+1:1:t_reopen]));
+plot_DI_death_rates_interp_2 = zeros(n_age_strat,length([t_SIP+1:1:t_reopen]));
 
 for i = 1:n_age_strat
-    plot_DI_hosp_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_hosp_rates_2(i,:),[t_span_1+1:1:t_span_2]);
-    plot_DI_resp_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_resp_rates_2(i,:),[t_span_1+1:1:t_span_2]);
-    plot_DI_death_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_death_rates_2(i,:),[t_span_1+1:1:t_span_2]);
+    plot_DI_hosp_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_hosp_rates_2(i,:),[t_SIP+1:1:t_reopen]);
+    plot_DI_resp_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_resp_rates_2(i,:),[t_SIP+1:1:t_reopen]);
+    plot_DI_death_rates_interp_2(i,:) = interp1(sol2.x,plot_DI_death_rates_2(i,:),[t_SIP+1:1:t_reopen]);
 end
 
 % change to culmulative
 mean_hospital = 5;
 mean_ICU = 15;
-plot_DI_hosp_2 = zeros(n_age_strat,length([t_span_1+1:1:t_span_2]));
-plot_DI_resp_2 = zeros(n_age_strat,length([t_span_1+1:1:t_span_2]));
+plot_DI_hosp_2 = zeros(n_age_strat,length([t_SIP+1:1:t_reopen]));
+plot_DI_resp_2 = zeros(n_age_strat,length([t_SIP+1:1:t_reopen]));
 
-plot_DI_hosp_2(:,1)= plot_DI_hosp_1(:,t_span_1)+plot_DI_hosp_rates_interp_2(:,1) - plot_DI_hosp_rates_interp_1(:,t_span_1-(mean_hospital-1));
-plot_DI_resp_2(:,1)= plot_DI_resp_1(:,t_span_1)+plot_DI_resp_rates_interp_2(:,1) - plot_DI_resp_rates_interp_1(:,t_span_1-(mean_ICU-1));
+plot_DI_hosp_2(:,1)= plot_DI_hosp_1(:,t_SIP)+plot_DI_hosp_rates_interp_2(:,1) - plot_DI_hosp_rates_interp_1(:,t_SIP-(mean_hospital-1));
+plot_DI_resp_2(:,1)= plot_DI_resp_1(:,t_SIP)+plot_DI_resp_rates_interp_2(:,1) - plot_DI_resp_rates_interp_1(:,t_SIP-(mean_ICU-1));
 plot_DI_death_2 = plot_DI_death_rates_interp_2;
 
 for t = 2:mean_hospital
     for i = 1:n_age_strat
-    plot_DI_hosp_2(i,t)= plot_DI_hosp_rates_interp_2(i,t) + plot_DI_hosp_2(i,t-1)-plot_DI_hosp_rates_interp_1(i,t_span_1-(mean_hospital-t));
+    plot_DI_hosp_2(i,t)= plot_DI_hosp_rates_interp_2(i,t) + plot_DI_hosp_2(i,t-1)-plot_DI_hosp_rates_interp_1(i,t_SIP-(mean_hospital-t));
     end
 end
 for t = 2:mean_ICU
      for i = 1:n_age_strat
-     plot_DI_resp_2(i,t)= plot_DI_resp_rates_interp_2(i,t) + plot_DI_resp_2(i,t-1)-plot_DI_resp_rates_interp_1(i,t_span_1-(mean_ICU-t));
+     plot_DI_resp_2(i,t)= plot_DI_resp_rates_interp_2(i,t) + plot_DI_resp_2(i,t-1)-plot_DI_resp_rates_interp_1(i,t_SIP-(mean_ICU-t));
      end
 end
 
-for t = mean_hospital+1:length([t_span_1+1:1:t_span_2])
+for t = mean_hospital+1:length([t_SIP+1:1:t_reopen])
      for i = 1:n_age_strat
      plot_DI_hosp_2(i,t)=plot_DI_hosp_rates_interp_2(i,t)+plot_DI_hosp_2(i,t-1)-plot_DI_hosp_rates_interp_2(i,t-mean_hospital);
      end
 end
 
-for t = mean_ICU+1:length([t_span_1+1:1:t_span_2])
+for t = mean_ICU+1:length([t_SIP+1:1:t_reopen])
      for i = 1:n_age_strat
      plot_DI_resp_2(i,t)=plot_DI_resp_rates_interp_2(i,t)+plot_DI_resp_2(i,t-1)-plot_DI_resp_rates_interp_2(i,t-mean_ICU);
      end
@@ -320,21 +329,21 @@ for i = 1:n_age_strat
     end
 end
 
-plot_DI_hosp_rates_interp_3 = zeros(n_age_strat,length([t_span_2+1:1:t_span_3]));
-plot_DI_resp_rates_interp_3 = zeros(n_age_strat,length([t_span_2+1:1:t_span_3]));
-plot_DI_death_rates_interp_3 = zeros(n_age_strat,length([t_span_2+1:1:t_span_3]));
+plot_DI_hosp_rates_interp_3 = zeros(n_age_strat,length([t_reopen+1:1:t_end]));
+plot_DI_resp_rates_interp_3 = zeros(n_age_strat,length([t_reopen+1:1:t_end]));
+plot_DI_death_rates_interp_3 = zeros(n_age_strat,length([t_reopen+1:1:t_end]));
 
 for i = 1:n_age_strat
-    plot_DI_hosp_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_hosp_rates_3(i,:),[t_span_2+1:1:t_span_3]);
-    plot_DI_resp_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_resp_rates_3(i,:),[t_span_2+1:1:t_span_3]);
-    plot_DI_death_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_death_rates_3(i,:),[t_span_2+1:1:t_span_3]);
+    plot_DI_hosp_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_hosp_rates_3(i,:),[t_reopen+1:1:t_end]);
+    plot_DI_resp_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_resp_rates_3(i,:),[t_reopen+1:1:t_end]);
+    plot_DI_death_rates_interp_3(i,:) = interp1(sol3.x,plot_DI_death_rates_3(i,:),[t_reopen+1:1:t_end]);
 end
 
 % change to culmulative
 mean_hospital = 5;
 mean_ICU = 15;
-plot_DI_hosp_3 = zeros(n_age_strat,length([t_span_2+1:1:t_span_3]));
-plot_DI_resp_3 = zeros(n_age_strat,length([t_span_2+1:1:t_span_3]));
+plot_DI_hosp_3 = zeros(n_age_strat,length([t_reopen+1:1:t_end]));
+plot_DI_resp_3 = zeros(n_age_strat,length([t_reopen+1:1:t_end]));
 
 plot_DI_hosp_3(:,1)= plot_DI_hosp_2(:,end)+plot_DI_hosp_rates_interp_3(:,1)-plot_DI_hosp_rates_interp_2(:,end-(mean_hospital-1));
 plot_DI_resp_3(:,1)= plot_DI_resp_2(:,end)+plot_DI_resp_rates_interp_3(:,1)-plot_DI_resp_rates_interp_2(:,end-(mean_ICU-1));
@@ -351,13 +360,13 @@ for t = 2:mean_ICU
      end
 end
 
-for t = mean_hospital+1:length([t_span_2+1:1:t_span_3])
+for t = mean_hospital+1:length([t_reopen+1:1:t_end])
      for i = 1:n_age_strat
      plot_DI_hosp_3(i,t)=plot_DI_hosp_rates_interp_3(i,t)+plot_DI_hosp_3(i,t-1)-plot_DI_hosp_rates_interp_3(i,t-mean_hospital);
      end
 end
 
-for t = mean_ICU+1:length([t_span_2+1:1:t_span_3])
+for t = mean_ICU+1:length([t_reopen+1:1:t_end])
      for i = 1:n_age_strat
      plot_DI_resp_3(i,t)=plot_DI_resp_rates_interp_3(i,t)+plot_DI_resp_3(i,t-1)-plot_DI_resp_rates_interp_3(i,t-mean_ICU);
      end
@@ -382,12 +391,12 @@ plot_DI_hosp_total = [output.hosp_phase_1,output.hosp_phase_2, output.hosp_phase
 plot_DI_resp_total = [output.resp_phase_1,output.resp_phase_2, output.resp_phase_3];
 plot_DI_death_total = [output.death_phase_1,output.death_phase_2, output.death_phase_3];
 
-capacity_bed = (1034+1222)*ones(1,t_span_3);
-capacity_ven = 722*ones(1,t_span_3);
-X2 = [1:t_span_3];
+capacity_bed = (1034+1222)*ones(1,t_end);
+capacity_ven = 722*ones(1,t_end);
+X2 = [1:t_end];
 YMatrix4 = [plot_DI_hosp_total;plot_DI_resp_total;capacity_bed;capacity_ven];
 
-
+if options_figure
 
 % Create figure
 figure2 = figure;
@@ -409,7 +418,7 @@ xlabel({'Time (days)'});
 title({'Dyanmics of cases needing advanced care'});
 box(axes1,'on');
 % Set the remaining axes properties
-set(axes1,'FontSize',14,'XGrid','on','XTick',[0:50:t_span_3],'YGrid','on');
+set(axes1,'FontSize',14,'XGrid','on','XTick',[0:50:t_end],'YGrid','on');
 % Create legend
 legend(axes1,'show');
 
@@ -431,5 +440,7 @@ title({'Cumulative Death'});
 box(axes1,'on');
 % Set the remaining axes properties
 set(axes1,'FontSize',18);
+
+end
 
 
