@@ -1,4 +1,4 @@
-function output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multipler, t_SIP, t_reopen, t_end, N_zero_patient, options_figure)
+function output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multipler, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
@@ -13,6 +13,7 @@ age_work_dist = [0.24*[0.554 0.374 0.072]; 0.6*[0.56 0.373 0.067];0.16*[ 0.508 0
 
 % generate epi parameters besides beta
 param_epi = generate_param_epi(n_age_strat, n_work_strat);
+param_epi.p = infect_rate;
 % generate param policy
 param_policy.e = 1;
 % percentage of peop/Users/mingxi/Desktop/COVID_code/main2_phases.mle under policy control (could be work X age specific)
