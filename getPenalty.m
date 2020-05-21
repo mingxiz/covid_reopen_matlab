@@ -1,11 +1,8 @@
-%{
-W_multiplier = 1;
-O_multiplier = 0.3;
-H_multiplier = 0.5;
-N_zero_patient = 10;
-infect_rate = 0.03;
-%}
+
 function penaltyValue = getPenalty(W_multiplier, O_multiplier, H_multiplier, N_zero_patient, infect_rate)
+% Written by Zhengli Wang %
+% modified 2020/5/21
+
 % Patient 0 assumed Jan. 26
 % Phase 1: Jan. 26 - March 15
 % Phase 2: March 16 - May 15
@@ -30,13 +27,15 @@ targetOutput = [output.resp_phase_2(bchmkStart:bchmkStart+length_bchmkData-1);
     output.death_phase_2(bchmkStart:bchmkStart+length_bchmkData-1)];
 
 diffMat = targetOutput - bchmkData;
+diffMat = diffMat(1:2,:);   % exclude death
 init_penaltyValue = sqrt(sum(diffMat(:).^2));
 
 preTargetOutput = [output.resp_phase_1, output.resp_phase_2(1: bchmkStart-1);
     output.hosp_phase_1, output.hosp_phase_2(1: bchmkStart-1);
     output.death_phase_1, output.death_phase_2(1: bchmkStart-1)];
     
-addPenaltyMultiplier = 10^4;
+%addPenaltyMultiplier = 10^4;
+addPenaltyMultiplier = 0;
 
 % no. of entries larger than first day of benchmark data
 nEntriesLarger = sum(sum(preTargetOutput > bchmkData(:,1)));
@@ -52,4 +51,8 @@ hold on
 plot(1:(per1Length+per2Length), [output.hosp_phase_1,output.hosp_phase_2], 'b-');
 plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(1,:), 'r:', 'LineWidth',2)
 plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(2,:), 'b:', 'LineWidth',2)
+title(['W = ' num2str(W_multiplier) ', O = ' num2str(O_multiplier) ', H = ' num2str(H_multiplier) ', n0 = ' num2str(N_zero_patient) ', infectRate = ' num2str(infect_rate) ])
+saveName = [num2str(W_multiplier) num2str(O_multiplier) num2str(H_multiplier) num2str(N_zero_patient) num2str(infect_rate) '.png'];
+saveas(gcf, saveName)
+close(gcf)
 %}
