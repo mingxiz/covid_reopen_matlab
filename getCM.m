@@ -27,11 +27,11 @@ pre_epi_bchmrkTWTOTSTH = [1.22
 13.555];
 
 if phaseIndicator == 1 % pre-epidemic
-    %epi_ymo_fvpvnv_fullTWTOTS = pre_epi_bchmrkTWTOTSTH(1:9);
+    epi_ymo_fvpvnv_fullTWTOTS = pre_epi_bchmrkTWTOTSTH(1:9);
     epi_rel_TWTOTS = ones(9,1);
     if W_multiplier ~= 1 || O_multiplier~= 1 || S_multiplier~=1 || H_multipler~= 1; disp('error, phase 1, multiplier ~= 1'); temp = [1,2]*[1,2]; end
 elseif phaseIndicator == 2 ||  phaseIndicator == 3
-    %{
+    
     epi_ymo_fvpvnv_fullTWTOTS = [0.35136
     1.286208
     0.22176
@@ -44,7 +44,7 @@ elseif phaseIndicator == 2 ||  phaseIndicator == 3
     17.174832
     19.255008
     19.1500535];  % from Google tracking
-    %}
+    
     epi_rel_TWTOTS = [fvpvnvRatioVec, fvpvnvRatioVec, fvpvnvRatioVec]';
 end
 % Note epi_rel_TH is 1
