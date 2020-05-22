@@ -1,5 +1,5 @@
 
-function penaltyValue = getPenalty(W_multiplier, O_multiplier, H_multiplier, N_zero_patient, infect_rate)
+function penaltyValue = getPenalty(W_multiplier, O_multiplier, H_multiplier, fvpvnvRatioVec, N_zero_patient, infect_rate)
 % Written by Zhengli Wang %
 % modified 2020/5/21
 
@@ -12,7 +12,7 @@ S_multiplier = 0;
 per1Length = 50;
 per2Length = 60;
 per3Length = 20;
-output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multiplier, per1Length, per1Length+per2Length, per1Length+per2Length+per3Length, N_zero_patient, infect_rate, options_figure);
+output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multiplier,fvpvnvRatioVec, per1Length, per1Length+per2Length, per1Length+per2Length+per3Length, N_zero_patient, infect_rate, options_figure);
 
 % bchmrkData from Match 27 to May 5
 bchmkData = [63	66	69	72	73	82	75	76	69	72	72	74	73	77	66	69	69	64	65	64	58	72	66	67	69	69	67	66	60	61	65	55	50	45	43	36	37	37	35	35
