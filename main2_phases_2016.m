@@ -1,4 +1,4 @@
-function output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multipler, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
+function output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multipler, fvpvnvRatioVec, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
@@ -71,7 +71,8 @@ O_multiplier_1 = 1;
 S_multiplier_1 = 1;
 H_multipler_1 = 1;
 phaseIndicator = 1;
-parm_beta_1 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier_1, O_multiplier_1, S_multiplier_1, H_multipler_1, phaseIndicator);
+fvpvnvRatioVec_1 = [1 1 1];
+parm_beta_1 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier_1, O_multiplier_1, S_multiplier_1, H_multipler_1, fvpvnvRatioVec_1, phaseIndicator);
 
 opts = odeset('RelTol',1e-4,'AbsTol',1e-4);
 % v1 is the version that didn't consider death influence on infection
@@ -102,7 +103,7 @@ y0_1p = yt1(:,size(sol1.x,2));
 % following website with time span 1 180, use ode 45 as solver
 tspan2 =[t_SIP+1, t_reopen];
 phaseIndicator = 2;
-parm_beta_2 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multipler, phaseIndicator);
+parm_beta_2 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multipler, fvpvnvRatioVec, phaseIndicator);
 
 % v1 is the version that didn't consider death influence on infection
 sol2 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_2, param_policy, x0_1p), tspan2, y0_1p, opts);
@@ -132,12 +133,7 @@ y0_2p = yt2(:,size(sol2.x,2));
 % following website with time span 1 180, use ode 45 as solver
 tspan3 =[t_reopen+1, t_end];
 phaseIndicator = 2;
-W_multiplier = 1;
-O_multiplier = 1;
-S_multiplier = 0.5;
-H_multipler = 0.5;
-parm_beta_3 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multipler, phaseIndicator);
-
+parm_beta_3 = parm_beta_2
 
 % v1 is the version that didn't consider death influence on infection
 sol3 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_3, param_policy, x0_2p), tspan3, y0_2p, opts);
