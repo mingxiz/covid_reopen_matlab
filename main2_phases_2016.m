@@ -133,7 +133,7 @@ y0_2p = yt2(:,size(sol2.x,2));
 % following website with time span 1 180, use ode 45 as solver
 tspan3 =[t_reopen+1, t_end];
 phaseIndicator = 2;
-parm_beta_3 = parm_beta_2
+parm_beta_3 = parm_beta_2;
 
 % v1 is the version that didn't consider death influence on infection
 sol3 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_3, param_policy, x0_2p), tspan3, y0_2p, opts);
