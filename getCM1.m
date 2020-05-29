@@ -1,6 +1,7 @@
 
 function finalCM = getCM1(W_multiplier, O_multiplier, S_multiplier, H_multipler, fvpvnvRatioVec, epi_ymo_fvpvnv_fullTWTOTS, phaseIndicator)
 
+
 % Written by Zhengli Wang %
 % modified 2020/5/21
 
@@ -31,25 +32,29 @@ if phaseIndicator == 1 % pre-epidemic
     epi_rel_TWTOTS = ones(9,1);
     if W_multiplier ~= 1 || O_multiplier~= 1 || S_multiplier~=1 || H_multipler~= 1; disp('error, phase 1, multiplier ~= 1'); temp = [1,2]*[1,2]; end
 elseif phaseIndicator == 2 ||  phaseIndicator == 3
-    
-    epi_ymo_fvpvnv_fullTWTOTS = [0.35136
-    1.286208
-    0.22176
+
+    epi_ymo_fvpvnv_fullTWTOTS = [1.22
+    4.466
+    0.77
     3.413808
     3.026784
     4.5981865
-    3.06
-    0.432
-    0.03
+    0
+    0
+    0
     17.174832
     19.255008
     19.1500535];  % from Google tracking
-    
-    epi_rel_TWTOTS = [fvpvnvRatioVec, fvpvnvRatioVec, fvpvnvRatioVec]';
+    % Home should be 24 minus the rest!!
+
+    %  Assumption: only NV are working, and all the rest
+    %  of the hours are given by the google tracking data
+    epi_rel_TWTOTS = [[0 0 1], [1 1 1], [1 1 1]]';
+
 end
 % Note epi_rel_TH is 1
 
-epi_rel_o_TWTOTS = 0.001;
+epi_rel_o_TWTOTS = 1;
 
 
 pre_epi_bchmrkWOSH = [0.193621269	0.594440112	1.04297E-05
@@ -153,4 +158,3 @@ epi_avgHvalue_y = sum(epi_percMat(1,:)'.*sum(epi_WOSH(end-8:end-6,:),2));
 epi_avgHvalue_m = sum(epi_percMat(2,:)'.*sum(epi_WOSH(end-5:end-3,:),2));
 epi_avgHvalue_o = sum(epi_percMat(3,:)'.*sum(epi_WOSH(end-2:end-0,:),2));
 epi_avgHvalue = sum(pop_perc_ymo.*[epi_avgHvalue_y; epi_avgHvalue_m; epi_avgHvalue_o]);
-
