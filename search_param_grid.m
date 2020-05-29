@@ -1,23 +1,23 @@
 clear all
-fileName = 'tested_grid'
-fullFileName = 'tested_grid.mat'
+fileName = 'tested_grid';
+fullFileName = 'tested_grid.mat';
 if exist(fullFileName, 'file')
-  load(fileName)
+  load(fileName);
 else
-  tested_grid = containers.Map
+  tested_grid = containers.Map;
 end
 
 fvpvnvRatioVec = [0,0,0.5];
 
-keys = keys(tested_grid)
+keys = keys(tested_grid);
 
 currBestPenalty = Inf;
 tic
 
 for i = 1:length(tested_grid)
-  disp(num2str(i));
-  disp(char(keys(i)));
-  disp(str2num(char(keys(i))));
+  % disp(num2str(i));
+  % disp(char(keys(i)));
+  % disp(str2num(char(keys(i))));
   param = str2num(char(keys(i)));
   W_multiplier = param(1);
   O_multiplier = param(2);
@@ -25,7 +25,7 @@ for i = 1:length(tested_grid)
   N_zero_patient = param(4);
   infect_rate = param(5);
 
-  penaltyValue = tested_grid(char(keys(i)))
+  penaltyValue = tested_grid(char(keys(i)));
 
   if penaltyValue < currBestPenalty
       bestW_multiplier = W_multiplier;
@@ -57,23 +57,23 @@ figure
 plot(1:(per1Length+per2Length), [output.resp_phase_1,output.resp_phase_2], 'r-');
 hold on
 plot(1:(per1Length+per2Length), [output.hosp_phase_1,output.hosp_phase_2], 'b-');
-plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(1,:), 'r:', 'LineWidth',2)
-plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(2,:), 'b:', 'LineWidth',2)
+plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(1,:), 'r:', 'LineWidth',2);
+plot((per1Length + bchmkStart):(per1Length + bchmkStart + length_bchmkData - 1), bchmkData(2,:), 'b:', 'LineWidth',2);
 
 similar_sol = 0;
 
 for i = 1:length(tested_grid)
-  param = str2num(char(keys(i)))
-  W_multiplier = param(1)
-  O_multiplier = param(2)
-  H_multiplier = param(3)
-  N_zero_patient = param(4)
-  infect_rate = param(5)
+  param = str2num(char(keys(i)));
+  W_multiplier = param(1);
+  O_multiplier = param(2);
+  H_multiplier = param(3);
+  N_zero_patient = param(4);
+  infect_rate = param(5);
 
-  penaltyValue = tested_grid(char(keys(i)))
+  penaltyValue = tested_grid(char(keys(i)));
 
-  if abs(penaltyValue - currBestPenalty) < 5
-    similar_sol = similar_sol + 1
+  if abs(penaltyValue - 89.5482) < 1
+    similar_sol = similar_sol + 1;
 
     output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multiplier,fvpvnvRatioVec, per1Length, per1Length+per2Length, per1Length+per2Length+per3Length, N_zero_patient, infect_rate, options_figure);
 
@@ -81,6 +81,7 @@ for i = 1:length(tested_grid)
     hold on
     plot(1:(per1Length+per2Length), [output.hosp_phase_1,output.hosp_phase_2], 'b-');
 
+    disp('-------------------------------------')
     disp(['Best Penalty = ' num2str(currBestPenalty)])
     disp(['Penalty Value = ' num2str(penaltyValue)])
     disp(['W_multiplier = ' num2str(W_multiplier)])
@@ -88,6 +89,8 @@ for i = 1:length(tested_grid)
     disp(['H_multiplier = ' num2str(H_multiplier)])
     disp(['N_zero_patient = ' num2str(N_zero_patient)])
     disp(['infect_rate = ' num2str(infect_rate)])
-
+    disp('-------------------------------------')
   end
 end
+
+saveas(gcf, './Figures/Fitted_PhaseII.pdf')
