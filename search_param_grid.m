@@ -72,7 +72,7 @@ for i = 1:length(tested_grid)
 
   penaltyValue = tested_grid(char(keys(i)));
 
-  if abs(penaltyValue - 89.5482) < 1
+  if abs(penaltyValue - currBestPenalty) < 8
     similar_sol = similar_sol + 1;
 
     output = main2_phases_2016(W_multiplier, O_multiplier, S_multiplier, H_multiplier,fvpvnvRatioVec, per1Length, per1Length+per2Length, per1Length+per2Length+per3Length, N_zero_patient, infect_rate, options_figure);
