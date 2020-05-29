@@ -1,4 +1,4 @@
-function output = main2_phases_2016_reopen(W_multiplier, O_multiplier, S_multiplier, H_multiplier, W_multiplier_r,O_multiplier_r,S_multiplier_r,H_multipler_r, fvpvnvRatioVec, fvpvnvRatioVec_r, epi_ymo_fvpvnv_fullTWTOTS_r, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
+function output = main2_phases_2016_reopen(W_multiplier, O_multiplier, S_multiplier, H_multiplier, W_multiplier_r,O_multiplier_r,S_multiplier_r,H_multipler_r, fv_TWratio, pv_TWratio, nv_TWratio, TOratio, TSratio, o_specialCare, epi_ymo_fvpvnv_fullTWTOTS_r, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
@@ -132,9 +132,7 @@ y0_2p = yt2(:,size(sol2.x,2));
 
 % following website with time span 1 180, use ode 45 as solver
 tspan3 =[t_reopen+1, t_end];
-phaseIndicator = 3;
-parm_beta_3 = generate_param_beta3(n_age_strat, n_work_strat, param_epi, W_multiplier_r, O_multiplier_r, S_multiplier_r, H_multipler_r, fvpvnvRatioVec_r, epi_ymo_fvpvnv_fullTWTOTS_r, phaseIndicator);
-
+parm_beta_3 = generate_param_beta3(n_age_strat, n_work_strat, param_epi, W_multiplier_r, O_multiplier_r, S_multiplier_r, H_multipler_r, fv_TWratio, pv_TWratio, nv_TWratio, TOratio, TSratio, o_specialCare);
 
 % v1 is the version that didn't consider death influence on infection
 sol3 = ode45(@(t,y) myODE_covid_v1(t, y, n_param, param_epi, parm_beta_3, param_policy, x0_2p), tspan3, y0_2p, opts);
