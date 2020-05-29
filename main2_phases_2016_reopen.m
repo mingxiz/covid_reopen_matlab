@@ -103,6 +103,7 @@ y0_1p = yt1(:,size(sol1.x,2));
 % following website with time span 1 180, use ode 45 as solver
 tspan2 =[t_SIP+1, t_reopen];
 phaseIndicator = 2;
+fvpvnvRatioVec = [0 0 1];
 parm_beta_2 = generate_param_beta2(n_age_strat, n_work_strat, param_epi, W_multiplier, O_multiplier, S_multiplier, H_multiplier , fvpvnvRatioVec, phaseIndicator);
 
 % v1 is the version that didn't consider death influence on infection
