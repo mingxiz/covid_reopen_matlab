@@ -1,8 +1,8 @@
 
-function finalCM = getCM(W_multiplier, O_multiplier, S_multiplier, H_multipler, epi_ymo_fvpvnv_TWTOTS)
+function finalCM = getCM1(W_multiplier, O_multiplier, S_multiplier, H_multipler, fvpvnvRatioVec, epi_ymo_fvpvnv_fullTWTOTS, phaseIndicator)
 
 % Written by Zhengli Wang %
-% modified 2020/5/28, directly input epi_ymo_fvpvnv_TWTOTS
+% modified 2020/5/21
 
 %{
 W_multiplier = 1;
@@ -10,6 +10,7 @@ O_multiplier = 1;
 S_multiplier = 1;
 H_multipler = 0.3;
 %}
+
 
 % pre-epidemic benchmark hrs
 pre_epi_bchmrkTWTOTSTH = [1.22
@@ -25,6 +26,31 @@ pre_epi_bchmrkTWTOTSTH = [1.22
 12.94
 13.555];
 
+if phaseIndicator == 1 % pre-epidemic
+    epi_ymo_fvpvnv_fullTWTOTS = pre_epi_bchmrkTWTOTSTH(1:9);
+    epi_rel_TWTOTS = ones(9,1);
+    if W_multiplier ~= 1 || O_multiplier~= 1 || S_multiplier~=1 || H_multipler~= 1; disp('error, phase 1, multiplier ~= 1'); temp = [1,2]*[1,2]; end
+elseif phaseIndicator == 2 ||  phaseIndicator == 3
+    
+    epi_ymo_fvpvnv_fullTWTOTS = [0.35136
+    1.286208
+    0.22176
+    3.413808
+    3.026784
+    4.5981865
+    3.06
+    0.432
+    0.03
+    17.174832
+    19.255008
+    19.1500535];  % from Google tracking
+    
+    epi_rel_TWTOTS = [fvpvnvRatioVec, fvpvnvRatioVec, fvpvnvRatioVec]';
+end
+% Note epi_rel_TH is 1
+
+epi_rel_o_TWTOTS = 0.001;
+
 
 pre_epi_bchmrkWOSH = [0.193621269	0.594440112	1.04297E-05
 0.291051208	4.718460835	3.13572E-05
@@ -39,7 +65,6 @@ pre_epi_bchmrkWOSH = [0.193621269	0.594440112	1.04297E-05
 1.255571221	1.811441214	0.04017814
 0.970863626	1.171044869	0.60262609];
 
-
 % Mtpl: Multiplier
 pre_epi_bchmrkWOSH_Mtpl = pre_epi_bchmrkWOSH;
 pre_epi_bchmrkWOSH_Mtpl(1:3,:) = pre_epi_bchmrkWOSH(1:3,:).*W_multiplier;
@@ -50,7 +75,20 @@ pre_epi_bchmrkWOSH_Mtpl(end-2:end,:) =  pre_epi_bchmrkWOSH(end-2:end,:).*H_multi
 epi_percMat = [55.4	37.4	7.2
 56.0	37.3	6.7
 50.8	41.8	7.4]./100;
-% horizontal: ymo, vertical: fv,pv,nv
+
+
+
+
+
+
+
+% e.g. epi_rel_TWTOTS = [0;0.5;1;1;1;1;0;0.5;1]; epi_rel_o_TWTOTS = 0.001;
+% -> epi_rel_ymo_fvpvnv_TWTOTS = [0;0.5;1;0;0.5;1;0.001;0.001;0.001;  1;1;1;1;1;1;0.001;0.001;0.001;  0;0.5;1;0;0.5;1;0.001;0.001;0.001]
+% (y,fv), (y,pv), (y,nv), (m,fv), (m,pv), (m,nv), (o,fv) ... for W, then (y,fv), (y,pv), (y,nv), (m,fv), (m,pv), (m,nv), (o,fv) ... for O
+epi_rel_ymo_fvpvnv_TWTOTS = [repmat(epi_rel_TWTOTS(1:3),2,1); repmat(epi_rel_o_TWTOTS,3,1); repmat(epi_rel_TWTOTS(4:6),2,1); repmat(epi_rel_o_TWTOTS,3,1); repmat(epi_rel_TWTOTS(7:9),2,1); repmat(epi_rel_o_TWTOTS,3,1)];
+
+epi_ymo_fvpvnv_TWTOTS = epi_rel_ymo_fvpvnv_TWTOTS.*repelem(epi_ymo_fvpvnv_fullTWTOTS(1:9),3);
+
 
 epi_TnH_Vec = zeros(9,1);
 for i = 1:length(epi_TnH_Vec)
