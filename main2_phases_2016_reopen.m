@@ -1,4 +1,4 @@
-function output = main2_phases_2016_reopen(W_multiplier, O_multiplier, S_multiplier, H_multiplier, W_multiplier_r,O_multiplier_r,S_multiplier_r,H_multipler_r, fv_TWratio, pv_TWratio, nv_TWratio, TOratio, TSratio, o_specialCare, epi_ymo_fvpvnv_fullTWTOTS_r, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
+function output = main2_phases_2016_reopen(W_multiplier, O_multiplier, S_multiplier, H_multiplier, W_multiplier_r,O_multiplier_r,S_multiplier_r,H_multipler_r, fv_TWratio, pv_TWratio, nv_TWratio, TOratio, TSratio, o_specialCare, t_SIP, t_reopen, t_end, N_zero_patient, infect_rate, options_figure)
 
 %  SEIR Model for COVID-19 reopenning project
 %  Written for MATLAB_R2019b
