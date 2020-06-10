@@ -478,6 +478,6 @@ set(axes1,'FontSize',18);
 end
 
 
-output.x1=x1;
-output.x2=x2;
-output.x3=x3;
+output.x1=sol1.x;
+output.x2=sol2.x;
+output.x3=sol3.x;
