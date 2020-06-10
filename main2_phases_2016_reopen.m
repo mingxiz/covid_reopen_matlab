@@ -476,3 +476,8 @@ box(axes1,'on');
 set(axes1,'FontSize',18);
 
 end
+
+
+output.x1=x1;
+output.x2=x2;
+output.x3=x3;
