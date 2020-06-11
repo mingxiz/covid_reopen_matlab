@@ -481,3 +481,6 @@ end
 output.x1=sol1.x;
 output.x2=sol2.x;
 output.x3=sol3.x;
+output.y1 = x1;
+output.y2 = x2;
+output.y3 = x3;
